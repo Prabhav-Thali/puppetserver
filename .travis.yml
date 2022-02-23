@@ -1,11 +1,16 @@
 language: clojure
-lein: 2.9.1
+#lein: 2.9.1
 dist: bionic
 #s390x
 arch: s390x
 
 services:
   - docker
+
+before_script:
+  - sudo env LEIN_ROOT=true curl -L -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/2.9.1/bin/lein
+  - sudo chmod +x /usr/local/bin/lein
+  - lein self-install
 
 script:
   - ./ext/travisci/test.sh
