@@ -13,14 +13,21 @@ before_install:
   - lein self-install
 
 script:
+  - mkdir /home/travis/tmp
+  - cat /etc/sysconfig/puppetserver
+  - cat /etc/default/puppetserver
   - ./ext/travisci/test.sh
+  - cat /etc/sysconfig/puppetserver
+  - cat /etc/default/puppetserver
   - $TRAVIS_BUILD_DIR/ext/travisci/secscan.sh "$TRAVIS_BUILD_DIR/src/clj" "clj"
+
 jobs:
   include:
     - stage: puppetserver tests
       name: "Java 8"
       jdk: openjdk8
     - jdk: openjdk11
+      env: JAVA_ARGS="-Djava.io.tmpdir=/home/travis/tmp"
       name: "Java 11"
     - jdk: openjdk11
       env: ADDITIONAL_LEIN_ARGS="with-profile fips"
